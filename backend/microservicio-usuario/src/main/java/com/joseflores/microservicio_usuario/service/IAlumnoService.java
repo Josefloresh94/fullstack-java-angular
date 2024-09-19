@@ -9,4 +9,8 @@ public interface IAlumnoService extends ICommonService<Alumno> {
 
     public List<Alumno> findByNombreOrApellido(String term);
 
+    public Iterable<Alumno> findAllById(Iterable<Long> ids);
+
+    public void eliminarCursoAlumnoPorId(Long id);
+
 }
