@@ -18,9 +18,6 @@ public class RespuestaService implements IRespuestaService{
     @Autowired
     private IRespuestaRepository repository;
 
-    @Autowired
-    private IExamenFeignClient examenFeign;
-
     @Override
     public Iterable<Respuesta> saveAll(Iterable<Respuesta> respuestas) {
         return repository.saveAll(respuestas);
@@ -28,31 +25,37 @@ public class RespuestaService implements IRespuestaService{
 
     @Override
     public Iterable<Respuesta> findRespuestaByAlumnoByExamen(Long alumnoId, Long examenId) {
-        Examen examen = examenFeign.obtenerExamenPorId(examenId);
-        List<Pregunta> preguntas = examen.getPreguntas();
-        List<Long> preguntaIds = preguntas.stream().map(p -> p.getId()).collect(Collectors.toList());
-        List<Respuesta> respuestas = (List<Respuesta>) repository.findRespuestaByAlumnoByPreguntaIds(alumnoId, preguntaIds);
-        respuestas = respuestas.stream().map(r ->{
-            preguntas.forEach(p ->{
-                if(p.getId() == r.getPreguntaId()) {
-                    r.setPregunta(p);
-                }
-            });
-            return r;
-        }).collect(Collectors.toList());
-
+//        Examen examen = examenFeign.obtenerExamenPorId(examenId);
+//        List<Pregunta> preguntas = examen.getPreguntas();
+//        List<Long> preguntaIds = preguntas.stream().map(p -> p.getId()).collect(Collectors.toList());
+//        List<Respuesta> respuestas = (List<Respuesta>) repository.findRespuestaByAlumnoByPreguntaIds(alumnoId, preguntaIds);
+//        respuestas = respuestas.stream().map(r ->{
+//            preguntas.forEach(p ->{
+//                if(p.getId() == r.getPreguntaId()) {
+//                    r.setPregunta(p);
+//                }
+//            });
+//            return r;
+//        }).collect(Collectors.toList());
+        List<Respuesta> respuestas = (List<Respuesta>) repository.findRespuestaByAlumnoByExamen(alumnoId, examenId);
         return respuestas;
     }
 
     @Override
     public Iterable<Long> findExamenesIdsConRespuestasByAlumno(Long alumnoId) {
-        List<Respuesta> respuestasAlumno = (List<Respuesta>) repository.findByAlumnoId(alumnoId);
-        List<Long> examenIds = Collections.emptyList();
-
-        if(!respuestasAlumno.isEmpty()) {
-            List<Long> preguntaIds = respuestasAlumno.stream().map(r -> r.getPreguntaId()).collect(Collectors.toList());
-            examenIds = examenFeign.obtenerExamenesIdsPorPreguntasIdRespondidas(preguntaIds);
-        }
+//        List<Respuesta> respuestasAlumno = (List<Respuesta>) repository.findByAlumnoId(alumnoId);
+//        List<Long> examenIds = Collections.emptyList();
+//
+//        if(!respuestasAlumno.isEmpty()) {
+//            List<Long> preguntaIds = respuestasAlumno.stream().map(r -> r.getPreguntaId()).collect(Collectors.toList());
+//            examenIds = examenFeign.obtenerExamenesIdsPorPreguntasIdRespondidas(preguntaIds);
+//        }
+        List<Respuesta> respuestasAlumno = (List<Respuesta>) repository.findExamenesIdsConRespuestasByAlumno(alumnoId);
+        List<Long> examenIds = respuestasAlumno
+                .stream()
+                .map(r -> r.getPregunta().getExamen().getId())
+                .distinct()
+                .collect(Collectors.toList());
 
         return examenIds;
     }

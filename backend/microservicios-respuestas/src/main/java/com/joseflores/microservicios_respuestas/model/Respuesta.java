@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collation = "respuestas")
@@ -20,12 +19,12 @@ public class Respuesta {
 
     private String texto;
 
-    @Transient
+    //@Transient
     private Alumno alumno;
 
     private Long alumnoId;
 
-    @Transient
+    //@Transient
     private Pregunta pregunta;
 
     private Long preguntaId;

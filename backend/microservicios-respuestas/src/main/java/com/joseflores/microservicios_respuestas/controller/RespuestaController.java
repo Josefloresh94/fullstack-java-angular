@@ -23,8 +23,8 @@ public class RespuestaController {
             r.setPreguntaId(r.getPregunta().getId());
             return r;
         }).collect(Collectors.toList());
-        Iterable<Respuesta> respuestaDb = service.saveAll(respuestas);
-        return ResponseEntity.status(HttpStatus.CREATED).body(respuestaDb);
+        Iterable<Respuesta> respuestasDb = service.saveAll(respuestas);
+        return ResponseEntity.status(HttpStatus.CREATED).body(respuestasDb);
     }
 
     @GetMapping("/alumno/{alumnoId}/examen/{examenId}")
@@ -34,7 +34,7 @@ public class RespuestaController {
     }
 
     @GetMapping("/alumno/{alumnoId}/examenes-respondidos")
-    public ResponseEntity<?> obtenerExamenesIdsConRespuestasAlumnos(@PathVariable Long alumnoId){
+    public ResponseEntity<?> obtenerExamenesIdsConRespuestasAlumno(@PathVariable Long alumnoId){
         Iterable<Long> examenesIds = service.findExamenesIdsConRespuestasByAlumno(alumnoId);
         return ResponseEntity.ok(examenesIds);
     }
