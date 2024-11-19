@@ -1,6 +1,7 @@
 package com.joseflores.microservicio_usuario.controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import com.joseflores.commons_alumnos.entity.Alumno;
@@ -20,6 +21,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class AlumnoController extends CommonController<Alumno, IAlumnoService> {
+
+    @GetMapping("/alumnos-por-curso")
+    public ResponseEntity<?> obtenerAlumnosPorCurso(@RequestParam List<Long> ids){
+        return ResponseEntity.ok(service.findAllById(ids));
+    }
 
     @GetMapping("/uploads/img/{id}")
     public ResponseEntity<?> verFoto(@PathVariable Long id){

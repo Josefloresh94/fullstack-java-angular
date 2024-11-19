@@ -2,27 +2,30 @@ package com.joseflores.microservicios_respuestas.model;
 
 import com.joseflores.commons_alumnos.entity.Alumno;
 import com.joseflores.commons_examenes.model.Pregunta;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name = "respuestas")
+@Document(collation = "respuestas")
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
 public class Respuesta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String texto;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    //@Transient
     private Alumno alumno;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    private Long alumnoId;
+
+    //@Transient
     private Pregunta pregunta;
+
+    private Long preguntaId;
 }

@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 public class RespuestaController {
 
@@ -15,8 +18,13 @@ public class RespuestaController {
 
     @PostMapping
     public ResponseEntity<?> crear(@RequestBody Iterable<Respuesta> respuestas){
-        Iterable<Respuesta> respuestaDb = service.saveAll(respuestas);
-        return ResponseEntity.status(HttpStatus.CREATED).body(respuestaDb);
+        respuestas = ((List<Respuesta>)respuestas).stream().map(r -> {
+            r.setAlumnoId(r.getAlumno().getId());
+            r.setPreguntaId(r.getPregunta().getId());
+            return r;
+        }).collect(Collectors.toList());
+        Iterable<Respuesta> respuestasDb = service.saveAll(respuestas);
+        return ResponseEntity.status(HttpStatus.CREATED).body(respuestasDb);
     }
 
     @GetMapping("/alumno/{alumnoId}/examen/{examenId}")
@@ -26,7 +34,7 @@ public class RespuestaController {
     }
 
     @GetMapping("/alumno/{alumnoId}/examenes-respondidos")
-    public ResponseEntity<?> obtenerExamenesIdsConRespuestasAlumnos(@PathVariable Long alumnoId){
+    public ResponseEntity<?> obtenerExamenesIdsConRespuestasAlumno(@PathVariable Long alumnoId){
         Iterable<Long> examenesIds = service.findExamenesIdsConRespuestasByAlumno(alumnoId);
         return ResponseEntity.ok(examenesIds);
     }
