@@ -7,10 +7,9 @@ import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2'
 
 @Component({
-  selector: 'app-alumnos-form',
-  standalone: true,
-  imports: [RouterModule, FormsModule, CommonModule],
-  templateUrl: './alumnos-form.component.html'
+    selector: 'app-alumnos-form',
+    imports: [RouterModule, FormsModule, CommonModule],
+    templateUrl: './alumnos-form.component.html'
 })
 export class AlumnosFormComponent implements OnInit {
   title: String = 'Crear Alumno';

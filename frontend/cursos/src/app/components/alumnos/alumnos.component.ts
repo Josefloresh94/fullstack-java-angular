@@ -8,10 +8,9 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatTableDataSource, MatTableModule, } from '@angular/material/table';
 
 @Component({
-  selector: 'alumnos',
-  standalone: true,
-  imports: [RouterModule, MatPaginatorModule, CommonModule],
-  templateUrl: './alumnos.component.html'
+    selector: 'alumnos',
+    imports: [RouterModule, MatPaginatorModule, CommonModule],
+    templateUrl: './alumnos.component.html'
 })
 export class AlumnosComponent<T> implements OnInit{
 
