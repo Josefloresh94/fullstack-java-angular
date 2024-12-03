@@ -1,71 +1,41 @@
-import { Component, OnInit, viewChild, ViewChild } from '@angular/core';
-import { AlumnoService } from '../../services/alumno.service';
-import { Alumno } from '../../models/alumno';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import Swal from 'sweetalert2'
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource, MatTableModule, } from '@angular/material/table';
+import { Component, DestroyRef, inject, OnInit, signal } from "@angular/core";
+import { Alumno, ColumnKeys } from "../../models/alumno";
+import { AlumnosGridComponent } from "./alumnos-grid/alumnos-grid.component";
+import { AlumnoService } from "../../services/alumno.service";
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { tap } from "rxjs";
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { RouterModule } from "@angular/router";
+import { MatCardModule } from "@angular/material/card";
+const MATERIAL_MODULES = [MatToolbarModule, MatIconModule, MatButtonModule, MatCardModule];
 
 @Component({
     selector: 'alumnos',
-    imports: [RouterModule, MatPaginatorModule, CommonModule],
-    templateUrl: './alumnos.component.html'
+    imports: [AlumnosGridComponent, MATERIAL_MODULES, RouterModule],
+    templateUrl: './alumnos.component.html',
+    styleUrl: './alumnos.component.css'
 })
-export class AlumnosComponent<T> implements OnInit{
+export class AlumnosComponent implements OnInit{
+  alumnos = signal<Alumno[]>([]);
 
-  titulo: string = 'Listado de Alumnos';
-  alumnos: Alumno[] = [];
-  dataSource = new MatTableDataSource<T>();
-  private readonly _paginator = viewChild.required<MatPaginator>(MatPaginator);
-  totalRegistros = 0;
-  paginaActual = 0;
-  totalPorPagina = 4;
-  pageSizeOptions: number[] = [5, 10, 25, 100];
+  displayedColumns: ColumnKeys<Alumno> = ['id', 'nombre','apellido', 'email', 'action'];
+  sortables: ColumnKeys<Alumno> = ['id', 'nombre','apellido', 'email'];
 
-  constructor(private service: AlumnoService){
-  }
+  private readonly _contactSvc = inject(AlumnoService);
+  private readonly _destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
-    this.dataSource.paginator = this._paginator()
-
+    this.getAllContacts();
   }
 
-  paginar(event: PageEvent): void {
-    this.paginaActual = event.pageIndex;
-    this.totalPorPagina = event.pageSize;
-    // this.calcularRangos();
-  }
-
-  // private calcularRangos(){
-  //   this.service.listarPaginas(this.paginaActual.toString(), this.totalPorPagina.toString())
-  //   .subscribe(p =>
-  //     {
-  //       this.alumnos = p.content as Alumno[];
-  //       this.totalRegistros = p.totalElements as number;
-  //       if (this._paginator._intl) {
-  //         this._paginator._intl.itemsPerPageLabel = 'Registros por página:';
-  //       }
-  //     });
-  // }
-
-  public eliminar(alumno: Alumno):void{
-    Swal.fire({
-      title: 'Cuidado:',
-      text: `¿Seguro que desea eliminar a ${alumno.nombre} ?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, eliminar!'
-    }).then((result) => {
-      if (result.value) {
-        this.service.eliminar(alumno.id).subscribe(() => {
-          // this.alumnos = this.alumnos.filter(a => a !== alumno);
-          // this.calcularRangos();
-          Swal.fire('Eliminado:', `Alumno ${alumno.nombre} eliminado con éxito`, 'success');
-        });
-      }
-    });
+  getAllContacts() {
+    this._contactSvc.listar()
+      .pipe(
+        takeUntilDestroyed(this._destroyRef),
+        tap((alumnos:Alumno[]) => this.alumnos.set(alumnos))
+      )
+    .subscribe()
   }
 }

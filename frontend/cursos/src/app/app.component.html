@@ -1,4 +1,14 @@
-<navbar></navbar>
-<div class="my-4">
-    <router-outlet></router-outlet>
-</div>
+<section>
+  <mat-card>
+    <mat-card-content>
+      @defer {
+        <navbar></navbar>
+        <router-outlet />
+      } @loading (minimum 1s) {
+        <div class="spinner-container">
+          <mat-spinner mode="indeterminate"></mat-spinner>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</section>
