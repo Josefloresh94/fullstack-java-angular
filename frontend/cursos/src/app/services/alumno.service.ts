@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Alumno } from '../models/alumno';
@@ -16,6 +16,13 @@ export class AlumnoService {
 
   public listar(): Observable<Alumno[]> {
     return this.http.get<Alumno[]>(this.baseEndpoint);
+  }
+
+  public listarPaginas(page: string, size: string): Observable<any>{
+    const params = new HttpParams()
+      .set('page', page)
+      .set('size', size);
+    return this.http.get<any>(`${this.baseEndpoint}/pagina/`, {params: params});
   }
 
   public ver(id: number): Observable<Alumno> {

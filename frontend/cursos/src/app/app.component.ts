@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from "./layout/navbar/navbar.component";
 
@@ -10,4 +10,5 @@ import { NavbarComponent } from "./layout/navbar/navbar.component";
 })
 export class AppComponent {
   title = 'cursos';
+
 }

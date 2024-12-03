@@ -29,8 +29,12 @@ public class CursoController extends CommonController<Curso, ICursoService> {
 
     @DeleteMapping("/eliminar-alumno/{id}")
     public ResponseEntity<?> eliminarCursoAlumnoPorId(@PathVariable Long id){
-        service.eliminarCursoAlumnoPorId(id);
-        return ResponseEntity.noContent().build();
+        try {
+            service.eliminarCursoAlumnoPorId(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @GetMapping
