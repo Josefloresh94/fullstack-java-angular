@@ -1,12 +1,75 @@
-<mat-card class="example-card" appearance="outlined">
-  <mat-card-header class="alumnos-header">
-    <mat-card-title>Alumnos</mat-card-title>
-    <a mat-button  routerLink="/alumnos/form">
-      <mat-icon>add_box</mat-icon>
-      <span>Nuevo Alumno</span>
-    </a>
-  </mat-card-header>
-  <mat-card-content>
-    <app-alumnos-grid [displayedColumns]="displayedColumns" [data]="alumnos()" [sortableColumns]="sortables"/>
-  </mat-card-content>
-</mat-card>
+<div class="relative overflow-x-auto sm:rounded-lg max-w max-h-screen m-2 p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+  <div class="flex justify-between align-middle">
+    <h1>Alumnos</h1>
+    <button class="btn btn-primary btn-sm rounded" routerLink="/alumnos/form">Crear Alumno</button>
+  </div>
+  <hr>
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+              <th scope="col" class="px-6 py-3">ID</th>
+              <th scope="col" class="px-6 py-3">Foto</th>
+              <th scope="col" class="px-6 py-3">Nombre</th>
+              <th scope="col" class="px-6 py-3">Apellido</th>
+              <th scope="col" class="px-6 py-3">Email</th>
+              <th scope="col" class="px-6 py-3">Creado en</th>
+              <th scope="col" class="px-6 py-3">Editar</th>
+              <th scope="col" class="px-6 py-3">Eliminar</th>
+          </tr>
+      </thead>
+      <tbody>
+        @for (alumno of lista; track $index) {
+          <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+              <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  {{alumno.id}}
+              </td>
+              <td class="px-6 py-4">
+                @if (alumno.fotoHashCode) {
+                  <img
+                  [src]="baseEndpoint + '/uploads/img/' + alumno.id + '?fotoHashCode=' + alumno.fotoHashCode"
+                  class="img-thumbnail rounded"
+                  style="width: 64px; cursor: pointer;">
+                } @else {
+                  <button [routerLink]="['/alumnos/form', alumno.id]">
+                    <mat-icon aria-hidden="false" fontIcon="person_add"></mat-icon>
+                  </button>
+                }
+              </td>
+              <td class="px-6 py-4">
+                {{alumno.nombre}}
+              </td>
+              <td class="px-6 py-4">
+                {{alumno.apellido}}
+              </td>
+              <td class="px-6 py-4">
+                {{alumno.email}}
+              </td>
+              <td class="px-6 py-4">
+                {{alumno.createAt | date: 'yyyy/MM/dd'}}
+              </td>
+              <td class="px-6 py-4">
+                <button class="btn btn-secondary btn-sm"
+                  [routerLink]="['/alumnos/form', alumno.id]">
+                  editar
+                </button>
+              </td>
+              <td class="px-6 py-4">
+                <button class="btn btn-danger btn-sm"
+                        (click)="eliminar(alumno)">
+                        eliminar
+                    </button>
+              </td>
+          </tr>
+        }
+      </tbody>
+  </table>
+  <mat-paginator
+    [length]="totalRegistros"
+    [pageSize]="totalPorPagina"
+    [pageIndex]="paginaActual"
+    [pageSizeOptions]="pageSizeOptions"
+    (page) ="paginar($event)"
+    showFirstLastButtons
+    class="float-left mx-2">
+  </mat-paginator>
+</div>

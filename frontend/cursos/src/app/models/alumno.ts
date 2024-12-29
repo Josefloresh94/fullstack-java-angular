@@ -1,6 +1,8 @@
+import { Generic } from "./generic";
+
 export type ColumnKeys<T> = Array<keyof T>;
 
-export class Alumno {
+export class Alumno implements Generic {
     id: number = 0;
     nombre!: string;
     apellido!: string;

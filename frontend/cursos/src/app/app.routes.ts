@@ -5,14 +5,15 @@ import { ExamenesComponent } from './components/examenes/examenes.component';
 import { AlumnosFormComponent } from './components/alumnos/alumnos-form/alumnos-form.component';
 
 export const routes: Routes = [
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: '/alumnos'
-  },
+  { path: '', pathMatch: 'full', redirectTo: '/alumnos'},
   { path: 'alumnos', component: AlumnosComponent },
   { path: 'alumnos/form', component: AlumnosFormComponent },
   { path: 'alumnos/form/:id', component: AlumnosFormComponent },
   { path: 'cursos', component: CursosComponent },
-  { path: 'examenes', component: ExamenesComponent },
+  // {path: 'cursos/form', component: CursoFormComponent},
+  // {path: 'cursos/form/:id', component: CursoFormComponent},
+  {path: 'examenes', component: ExamenesComponent},
+  // {path: 'examenes/form', component: ExamenFormComponent},
+  // {path: 'examenes/form/:id', component: ExamenFormComponent},
+  // {path: 'cursos/asignar-alumnos/:id', component: AsignarAlumnosComponent},
 ];
