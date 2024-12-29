@@ -10,6 +10,7 @@ import com.joseflores.commons_microservicios.controllers.CommonController;
 import jakarta.validation.Valid;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,18 +30,29 @@ public class AlumnoController extends CommonController<Alumno, IAlumnoService> {
 
     @GetMapping("/uploads/img/{id}")
     public ResponseEntity<?> verFoto(@PathVariable Long id){
-
-        Optional<Alumno> o = service.findById(id);
+        try {
+            Optional<Alumno> o = service.findById(id);
 
         if (o.isEmpty() || o.get().getFoto() == null){
             return ResponseEntity.notFound().build();
         }
 
-        Resource imagen = new ByteArrayResource(o.get().getFoto());
+        // Resource imagen = new ByteArrayResource(o.get().getFoto());
+        // return ResponseEntity.ok()
+        //         .contentType(MediaType.IMAGE_JPEG)
+        //         .body(imagen);
+        Alumno alumno = o.get();
+        Resource imagen = new ByteArrayResource(alumno.getFoto());
 
+        String contentType = MediaType.IMAGE_JPEG_VALUE;
         return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"foto_" + alumno.getId() + "\"")
                 .body(imagen);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving the image");
+        }
     }
 
     @PutMapping("/{id}")
@@ -68,15 +80,23 @@ public class AlumnoController extends CommonController<Alumno, IAlumnoService> {
     }
 
     @PostMapping("/crear-con-foto")
-    public ResponseEntity<?> crearConFoto(@Valid Alumno alumno, BindingResult result, @RequestParam MultipartFile archivo) throws IOException {
-        if (!archivo.isEmpty()){
+    public ResponseEntity<?> crearConFoto(@Valid Alumno alumno, BindingResult result, @RequestParam("archivo") MultipartFile archivo) throws IOException {
+        // if (!archivo.isEmpty()){
+        //     alumno.setFoto(archivo.getBytes());
+        // }
+        // return super.crear(alumno, result);
+        if (result.hasErrors()) {
+            return this.validar(result);
+        }
+        if (!archivo.isEmpty()) {
             alumno.setFoto(archivo.getBytes());
         }
-        return super.crear(alumno, result);
+        Alumno alumnoDb = service.save(alumno);
+        return ResponseEntity.status(HttpStatus.CREATED).body(alumnoDb);
     }
 
     @PutMapping("/editar-con-foto/{id}")
-    public ResponseEntity<?> editarConFoto(@Valid Alumno alumno, BindingResult result, @PathVariable Long id, @RequestParam MultipartFile archivo) throws IOException {
+    public ResponseEntity<?> editarConFoto(@Valid Alumno alumno, BindingResult result, @PathVariable Long id, @RequestParam("archivo") MultipartFile archivo) throws IOException {
 
         if (result.hasErrors()){
             return this.validar(result);
@@ -94,6 +114,8 @@ public class AlumnoController extends CommonController<Alumno, IAlumnoService> {
             alumnoDb.setFoto(archivo.getBytes());
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.service.save(alumnoDb));
+        // return ResponseEntity.status(HttpStatus.CREATED).body(this.service.save(alumnoDb));
+        Alumno updatedAlumno = service.save(alumnoDb);
+        return ResponseEntity.status(HttpStatus.CREATED).body(updatedAlumno);
     }
 }
