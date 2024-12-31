@@ -1,1 +1,60 @@
-<p>cursos works!</p>
+<div  class="relative overflow-x-auto sm:rounded-lg max-w max-h-screen m-2 p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+  <div class="flex justify-between align-middle">
+    <h1>Cursos</h1>
+    <button class="btn btn-primary btn-sm rounded" routerLink="/cursos/form">Crear Curso</button>
+  </div>
+  <hr>
+  @if (lista.length > 0) {
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>nombre</th>
+          <th>alumnos</th>
+          <th>creado en</th>
+          <th>editar</th>
+          <th>eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (curso of lista; track $index) {
+          <tr>
+            <td>{{curso.id}}</td>
+            <td>{{curso.nombre}}</td>
+            <th>
+              <button class="btn btn-info btn-sm"
+              [routerLink]="['/cursos/asignar-alumnos', curso.id]">
+                añadir ({{curso.alumnos.length}})
+              </button>
+            </th>
+            <td>{{curso.createAt | date: 'yyyy/MM/dd'}}</td>
+            <td>
+              <button class="btn btn-secondary btn-sm"
+                [routerLink]="['/cursos/form', curso.id]">
+                editar
+              </button>
+            </td>
+            <td>
+              <button class="btn btn-danger btn-sm"
+                (click)="eliminar(curso)">
+                eliminar
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <mat-paginator [length]="totalRegistros"
+          [pageSize]="totalPorPagina"
+          [pageIndex]="paginaActual"
+          [pageSizeOptions]="pageSizeOptions"
+          (page) ="paginar($event)"
+          showFirstLastButtons
+          class="float-left mx-2">
+    </mat-paginator>
+  } @else {
+    <div class="alert alert-info">
+      No hay cursos en el sistema.
+    </div>
+  }
+</div>

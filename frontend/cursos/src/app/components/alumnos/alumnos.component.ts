@@ -6,11 +6,11 @@ import { BASE_ENDPOINT } from '../../config/app';
 import { RouterModule } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatIcon } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-alumnos',
-  imports: [RouterModule, DatePipe, MatPaginatorModule, MatIcon],
+  imports: [RouterModule, DatePipe, MatPaginatorModule, MatIconModule],
   templateUrl: './alumnos.component.html'
 })
 export class AlumnosComponent extends CommonListarComponent<Alumno ,AlumnoService> {

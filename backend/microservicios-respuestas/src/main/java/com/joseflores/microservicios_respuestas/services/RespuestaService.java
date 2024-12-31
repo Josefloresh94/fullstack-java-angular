@@ -1,14 +1,10 @@
 package com.joseflores.microservicios_respuestas.services;
 
-import com.joseflores.commons_examenes.model.Examen;
-import com.joseflores.commons_examenes.model.Pregunta;
-import com.joseflores.microservicios_respuestas.clients.IExamenFeignClient;
 import com.joseflores.microservicios_respuestas.model.Respuesta;
 import com.joseflores.microservicios_respuestas.repository.IRespuestaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 

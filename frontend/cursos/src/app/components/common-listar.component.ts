@@ -6,7 +6,7 @@ import { CommonService } from "../services/common.service";
 @Directive()
 export abstract class CommonListarComponent<E extends Generic, S extends CommonService<E>> implements OnInit {
   titulo!: string;
-  lista!: E[];
+  lista: E[] = [];
   protected nombreModel!: string;
 
   totalRegistros = 0;
@@ -23,7 +23,9 @@ export abstract class CommonListarComponent<E extends Generic, S extends CommonS
   }
 
   ngAfterViewInit(): void {
-    this.paginator._intl.itemsPerPageLabel = 'Registros por página';
+    if (this.paginator) {
+      this.paginator._intl.itemsPerPageLabel = 'Registros por página';
+    }
   }
 
   paginar(event: PageEvent): void {
