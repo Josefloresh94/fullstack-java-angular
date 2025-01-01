@@ -4,6 +4,7 @@ import { CursosComponent } from './components/cursos/cursos.component';
 import { ExamenesComponent } from './components/examenes/examenes.component';
 import { AlumnosFormComponent } from './components/alumnos/alumnos-form/alumnos-form.component';
 import { CursoFormComponent } from './components/cursos/curso-form/curso-form.component';
+import { ExamenesFormComponent } from './components/examenes/examenes-form/examenes-form.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/alumnos'},
@@ -14,7 +15,7 @@ export const routes: Routes = [
   { path: 'cursos/form', component: CursoFormComponent},
   { path: 'cursos/form/:id', component: CursoFormComponent},
   { path: 'examenes', component: ExamenesComponent},
-  // { path: 'examenes/form', component: ExamenFormComponent},
-  // { path: 'examenes/form/:id', component: ExamenFormComponent},
+  { path: 'examenes/form', component: ExamenesFormComponent},
+  { path: 'examenes/form/:id', component: ExamenesFormComponent},
   // { path: 'cursos/asignar-alumnos/:id', component: AsignarAlumnosComponent},
 ];
