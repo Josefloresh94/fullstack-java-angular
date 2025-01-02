@@ -12,6 +12,8 @@
       <tr>
         <th scope="col" class="px-6 py-3">ID</th>
         <th scope="col" class="px-6 py-3">Nombre</th>
+        <th scope="col" class="px-6 py-3">Asignaturas</th>
+        <th scope="col" class="px-6 py-3">Preguntas</th>
         <th scope="col" class="px-6 py-3">Creado en</th>
         <th scope="col" class="px-6 py-3">Editar</th>
         <th scope="col" class="px-6 py-3">Eliminar</th>
@@ -28,6 +30,12 @@
         </td>
         <td class="px-6 py-4">
           {{ examen.nombre }}
+        </td>
+        <td class="px-6 py-4">
+          {{ examen.asignaturaHija.padre.nombre || 'N/A' }} -> {{ examen.asignaturaHija.nombre || 'N/A' }}
+        </td>
+        <td class="px-6 py-4">
+          {{ examen.preguntas.length }}
         </td>
         <td>
           {{ examen.createAt | date: 'yyyy/MM/dd'}}

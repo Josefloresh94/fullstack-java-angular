@@ -30,29 +30,19 @@ public class AlumnoController extends CommonController<Alumno, IAlumnoService> {
 
     @GetMapping("/uploads/img/{id}")
     public ResponseEntity<?> verFoto(@PathVariable Long id){
-        try {
-            Optional<Alumno> o = service.findById(id);
+        Optional<Alumno> o = service.findById(id);
 
-        if (o.isEmpty() || o.get().getFoto() == null){
+        if (o.isEmpty() || o.get().getFoto() == null) {
             return ResponseEntity.notFound().build();
         }
 
-        // Resource imagen = new ByteArrayResource(o.get().getFoto());
-        // return ResponseEntity.ok()
-        //         .contentType(MediaType.IMAGE_JPEG)
-        //         .body(imagen);
         Alumno alumno = o.get();
         Resource imagen = new ByteArrayResource(alumno.getFoto());
 
-        String contentType = MediaType.IMAGE_JPEG_VALUE;
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"foto_" + alumno.getId() + "\"")
+                .contentType(MediaType.IMAGE_JPEG)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"foto_" + alumno.getId() + ".jpg\"")
                 .body(imagen);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving the image");
-        }
     }
 
     @PutMapping("/{id}")
@@ -81,15 +71,15 @@ public class AlumnoController extends CommonController<Alumno, IAlumnoService> {
 
     @PostMapping("/crear-con-foto")
     public ResponseEntity<?> crearConFoto(@Valid Alumno alumno, BindingResult result, @RequestParam("archivo") MultipartFile archivo) throws IOException {
-        // if (!archivo.isEmpty()){
-        //     alumno.setFoto(archivo.getBytes());
-        // }
-        // return super.crear(alumno, result);
         if (result.hasErrors()) {
             return this.validar(result);
         }
         if (!archivo.isEmpty()) {
-            alumno.setFoto(archivo.getBytes());
+            try {
+                alumno.setFoto(archivo.getBytes());
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al subir la foto");
+            }
         }
         Alumno alumnoDb = service.save(alumno);
         return ResponseEntity.status(HttpStatus.CREATED).body(alumnoDb);
@@ -102,7 +92,7 @@ public class AlumnoController extends CommonController<Alumno, IAlumnoService> {
             return this.validar(result);
         }
 
-        Optional<Alumno> o = this.service.findById(id);
+        Optional<Alumno> o = service.findById(id);
         if (o.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -111,10 +101,14 @@ public class AlumnoController extends CommonController<Alumno, IAlumnoService> {
         alumnoDb.setApellido(alumno.getApellido());
         alumnoDb.setEmail(alumno.getEmail());
         if (!archivo.isEmpty()){
-            alumnoDb.setFoto(archivo.getBytes());
+            try {
+                alumnoDb.setFoto(archivo.getBytes());
+            } catch (Exception e) {
+                // TODO: handle exception
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al subir la foto");
+            }
         }
 
-        // return ResponseEntity.status(HttpStatus.CREATED).body(this.service.save(alumnoDb));
         Alumno updatedAlumno = service.save(alumnoDb);
         return ResponseEntity.status(HttpStatus.CREATED).body(updatedAlumno);
     }

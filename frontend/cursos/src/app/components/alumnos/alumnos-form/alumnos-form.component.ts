@@ -30,13 +30,13 @@ export class AlumnosFormComponent extends CommonFormComponent<Alumno, AlumnoServ
     this.fotoSeleccionada = event.target.files[0];
     console.info(this.fotoSeleccionada);
 
-    if((this.fotoSeleccionada?.type ?? '').indexOf('image') < 0){
-      this.fotoSeleccionada = null;
+    if(this.fotoSeleccionada && this.fotoSeleccionada.type.indexOf('image') < 0){
       Swal.fire(
         'Error al seleccionar la foto:',
         'El archivo debe ser del tipo imagen',
         'error');
-    }
+      }
+      this.fotoSeleccionada = null;
   }
 
   public override crear(): void {
@@ -54,6 +54,8 @@ export class AlumnosFormComponent extends CommonFormComponent<Alumno, AlumnoServ
           if(err.status === 400){
             this.error = err.error;
             console.log(this.error);
+          } else {
+            Swal.fire('Error', 'Error al crear el alumno', 'error');
           }
         }
       });
@@ -75,6 +77,8 @@ export class AlumnosFormComponent extends CommonFormComponent<Alumno, AlumnoServ
           if(err.status === 400){
             this.error = err.error;
             console.log(this.error);
+          } else {
+            Swal.fire('Error', 'Error al actualizar el alumno', 'error');
           }
         }
       });

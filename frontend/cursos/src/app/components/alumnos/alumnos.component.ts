@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonListarComponent } from '../common-listar.component';
 import { AlumnoService } from '../../services/alumno.service';
 import { Alumno } from '../../models/alumno';
@@ -13,13 +13,17 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [RouterModule, DatePipe, MatPaginatorModule, MatIconModule],
   templateUrl: './alumnos.component.html'
 })
-export class AlumnosComponent extends CommonListarComponent<Alumno ,AlumnoService> {
+export class AlumnosComponent extends CommonListarComponent<Alumno ,AlumnoService> implements OnInit {
   baseEndpoint = BASE_ENDPOINT + '/alumnos';
 
   constructor(service: AlumnoService) {
     super(service);
     this.titulo = 'Listado de Alumnos';
     this.nombreModel = Alumno.name;
+  }
+
+  override ngOnInit(): void {
+    super.ngOnInit();
   }
 
 }

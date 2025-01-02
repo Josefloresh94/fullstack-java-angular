@@ -1,23 +1,26 @@
-<nav class="bg-gray-800">
+<nav x-data class="bg-gray-800">
   <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
     <div class="relative flex h-16 items-center justify-between">
       <div class="flex items-center sm:hidden">
-        <!-- Mobile menu button-->
-        <button (click)="toggleMenu()"  type="button" aria-controls="mobile-menu" aria-expanded="false" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-          @if (!isMenuOpen) {
-            <mat-icon class="text-xl" fontIcon="menu"></mat-icon>
-          } @else {
-            <mat-icon class="text-xl" fontIcon="close"></mat-icon>
-          }
+        <button
+          (click)="toggleMenu()"
+          type="button"
+          aria-controls="mobile-menu"
+          aria-expanded="false"
+          class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+          <mat-icon class="text-xl" fontIcon="{{isMenuOpen ? 'close':'menu'}}"></mat-icon>
         </button>
-        <div>
-          <!-- Mobile menu, show/hide based on menu state. -->
-          <div [ngClass]="isMenuOpen ? 'transition ease-out duration-200 transform opacity-100 scale-95' : 'transition ease-in duration-400 transform opacity-0 scale-95'" class="fixed left-0 z-10 min-h-[60%] w-[100%] origin-bottom-left p-2 bg-gray-800 mt-0.5 gap-8 flex flex-col items-start">
-            <a (click)="closeMenu()" routerLink="/alumnos" class="w-full rounded-md p-3 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white no-underline">Alumnos</a>
-            <a (click)="closeMenu()" routerLink="/cursos" class="w-full rounded-md p-3 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white no-underline">Cursos</a>
-            <a (click)="closeMenu()" routerLink="/examenes" class="w-full rounded-md p-3 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white no-underline">Examenes</a>
+        @if (isMenuOpen) {
+          <div>
+            <div
+              [ngClass]="isMenuOpen ? 'transition ease-out duration-200 transform opacity-100 scale-95' : 'transition ease-in duration-400 transform opacity-0 scale-95'"
+              class="fixed left-0 z-10 min-h-[60%] w-[100%] origin-bottom-left p-2 bg-gray-800 mt-0.5 gap-8 flex flex-col items-start">
+              <a (click)="closeMenu()" routerLink="/alumnos" class="w-full rounded-md p-3 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white no-underline">Alumnos</a>
+              <a (click)="closeMenu()" routerLink="/cursos" class="w-full rounded-md p-3 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white no-underline">Cursos</a>
+              <a (click)="closeMenu()" routerLink="/examenes" class="w-full rounded-md p-3 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white no-underline">Examenes</a>
+            </div>
           </div>
-        </div>
+        }
       </div>
       <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
         <div class="hidden sm:ml-6 sm:block">
@@ -36,8 +39,6 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
           </svg>
         </button>
-
-        <!-- Profile dropdown -->
         <div class="relative ml-3">
           <div>
             <button (click)="toggleDropdown()" type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
@@ -46,14 +47,70 @@
               <img class="size-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
             </button>
           </div>
-          <div [ngClass]="isDropdownOpen ? 'transition ease-out duration-200 transform opacity-100 scale-95' : 'transition ease-in duration-400 transform opacity-0 scale-95'" class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white p-1 shadow-lg ring-1 ring-black/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-            <!-- Active: "bg-gray-100 outline-none", Not Active: "" -->
-            <a href="#" class="block rounded-md px-4 py-2 text-sm text-gray-700 no-underline hover:bg-blue-100" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
-            <a href="#" class="block rounded-md px-4 py-2 text-sm text-gray-700 no-underline hover:bg-blue-100" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
-            <a href="#" class="block rounded-md px-4 py-2 text-sm text-gray-700 no-underline hover:bg-blue-100" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
-          </div>
+          @if (isDropdownOpen) {
+            <div [ngClass]="isDropdownOpen ? 'transition ease-out duration-200 transform opacity-100 scale-95' : 'transition ease-in duration-400 transform opacity-0 scale-95'" class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white p-1 shadow-lg ring-1 ring-black/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+              <a href="#" class="block rounded-md px-4 py-2 text-sm text-gray-700 no-underline hover:bg-blue-100" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
+              <a href="#" class="block rounded-md px-4 py-2 text-sm text-gray-700 no-underline hover:bg-blue-100" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
+              <a href="#" class="block rounded-md px-4 py-2 text-sm text-gray-700 no-underline hover:bg-blue-100" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
+            </div>
+          }
         </div>
       </div>
     </div>
   </div>
 </nav>
+<!-- <header class="bg-white w-full fixed top-0 left-0 z-50 shadow-sm">
+  <nav class="container mx-auto flex items-center justify-between h-16 sm:h-20 px-4">
+    <div class="font-bold text-2xl text-gray-800">ClassMate</div>
+
+    <ul class="hidden sm:flex items-center gap-6 m-0 p-0">
+      <li>
+        <a
+          routerLink="/alumnos"
+          [ngClass]="{'bg-slate-200 text-black': isActiveRoute('/alumnos')}"
+          class="rounded-md px-3 py-2 text-lg font-bold no-underline"
+          >
+          Alumnos
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/cursos"
+          [ngClass]="{'bg-slate-200 text-black': isActiveRoute('/cursos')}"
+          class="rounded-md px-3 py-2 text-lg font-bold no-underline"
+        >
+          Cursos
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/examenes"
+          [ngClass]="{'bg-slate-200 text-black': isActiveRoute('/examenes')}"
+          class="rounded-md px-3 py-2 text-lg font-bold no-underline"
+          >
+          Examenes
+        </a>
+      </li>
+    </ul>
+
+    <button
+      id="hamburger"
+      (click)="toggleMenu()"
+      type="button"
+      aria-controls="nav-menu"
+      aria-expanded="isMenuOpen"
+      class="sm:hidden relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-400">
+      <mat-icon class="text-xl" fontIcon="{{isMenuOpen ? 'close' : 'menu'}}"></mat-icon>
+    </button>
+    <div
+      id="nav-menu"
+      [ngClass]="isMenuOpen ? 'translate-x-0' : '-translate-x-full'"
+      class="fixed inset-0 bg-slate-200 flex flex-col items-center justify-center gap-8 text-lg font-medium transition-transform duration-300 sm:hidden">
+      <ul class="flex flex-col items-center gap-8">
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
+  </nav>
+</header> -->

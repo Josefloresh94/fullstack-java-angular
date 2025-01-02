@@ -8,6 +8,5 @@ export class Alumno implements Generic {
     apellido!: string;
     email!:string;
     createAt!: string;
-    fotoHashCode!: number;
-    action!: string;
+    fotoHashCode: number | null = 0;
 }
