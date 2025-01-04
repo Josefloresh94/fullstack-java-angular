@@ -1,1 +1,92 @@
-<p>Hola</p>
+<section class="relative overflow-x-auto sm:rounded-lg max-w max-h-screen m-2 p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+  <div class="flex justify-between align-middle">
+    <h1>{{titulo}}</h1>
+    <button class="btn btn-danger btn-sm rounded" routerLink="/examenes">
+      <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="home"></mat-icon>
+    </button>
+  </div>
+  <hr>
+  <form>
+      <!-- Input field for 'Name' -->
+      <div class="my-2">
+          <label for="nombre" class="text-sm sm:text-md font-bold text-gray-700 dark:text-gray-500">Nombre</label>
+          <input type="text" name="nombre" id="nombre" [(ngModel)]="model.nombre" autocomplete class="block w-full border px-2 py-2 text-sm sm:text-md rounded-md my-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-500">
+          @if (error?.nombre) {
+            <div class="alert alert-danger">
+              {{ error.nombre }}
+            </div>
+          }
+      </div>
+      <!-- Input field for 'Asignatura Padre' -->
+      <div class="my-2">
+          <label for="asignaturaPadre" class="text-sm sm:text-md font-bold text-gray-700 dark:text-gray-500">Asignatura</label>
+          <select
+            name="asignaturaPadre"
+            id="asignaturaPadre"
+            (change)="cargarHijos()"
+            [compareWith]="compararAsignatura"
+            [(ngModel)]="model.asignaturaPadre"
+            class="block w-full border px-2 py-2 text-sm sm:text-md rounded-md my-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-500"
+          >
+          <option [ngValue]="undefined">--- Seleccionar una asignatura ---</option>
+          @for (asignatura of asignaturasPadre; track $index) {
+            <option [ngValue]="asignatura">{{asignatura.nombre}}</option>
+          }
+          </select>
+          @if (error?.asignaturaPadre) {
+            <div class="alert alert-danger">
+              {{ error.asignaturaPadre }}
+            </div>
+          }
+      </div>
+      <!-- Input field for 'Asignatura Hija' -->
+      <div class="my-2">
+        <label for="asignaturaHija" class="text-sm sm:text-md font-bold text-gray-700 dark:text-gray-500">Asignatura Hija</label>
+        <select
+          name="asignaturaHija"
+          id="asignaturaHija"
+          [(ngModel)]="model.asignaturaHija"
+          [compareWith]="compararAsignatura"
+          class="block w-full border px-2 py-2 text-sm sm:text-md rounded-md my-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-500"
+        >
+          <option [ngValue]="undefined">--- Seleccionar una asignatura ---</option>
+          @for (asignatura of asignaturasHija; track $index) {
+            <option [ngValue]="asignatura">{{asignatura.nombre}}</option>
+          }
+        </select>
+        @if (error?.asignaturaHija) {
+          <div class="alert alert-danger">
+            {{ error.asignaturaHija }}
+          </div>
+        }
+      </div>
+      <div class="my-2">
+        <button (click)="agregarPregunta()" class="btn btn-light btn-lg my-3">
+          Agregar Pregunta
+        </button>
+
+        @for (pregunta of model.preguntas; track $index) {
+          <div class="my-2 flex items-end space-x-4">
+            <div class="flex-grow">
+              <label for="pregunta" class="text-sm sm:text-md font-bold text-gray-700 dark:text-gray-500">Pregunta {{$index + 1}}</label>
+              <input type="text" value="{{pregunta.texto}}" (change)="asignarTexto(pregunta, $event)" class="block w-full border px-2 py-2 text-sm sm:text-md rounded-md my-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-500">
+              @if (errorPreguntas) {
+                <div class="alert alert-danger">
+                  {{ errorPreguntas }}
+                </div>
+              }
+            </div>
+            <div>
+              <button (click)="eliminarPregunta(pregunta)" class="btn btn-danger btn-s rounded mb-2 p-1">
+                <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="close"></mat-icon>
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+      <!-- Save button -->
+      <button type="button" class="btn btn-primary" (click)="model.id ? editar() : crear()">
+        {{ model.id ? 'Actualizar': 'Crear' }}
+      </button>
+  </form>
+</section>

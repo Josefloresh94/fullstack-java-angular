@@ -1,6 +1,7 @@
 package com.joseflores.microservicios_examenes.controller;
 
 import com.joseflores.commons_examenes.model.Examen;
+import com.joseflores.commons_examenes.model.Pregunta;
 import com.joseflores.commons_microservicios.controllers.CommonController;
 import com.joseflores.microservicios_examenes.services.ExamenService;
 import jakarta.validation.Valid;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class ExamenController extends CommonController<Examen, ExamenService> {
@@ -34,12 +36,17 @@ public class ExamenController extends CommonController<Examen, ExamenService> {
         Examen examenDb = o.get();
         examenDb.setNombre(examen.getNombre());
 
-        examenDb.getPreguntas()
+        List<Pregunta> eliminadas = examenDb.getPreguntas()
                 .stream()
                 .filter(pdb -> !examen.getPreguntas().contains(pdb))
-                .forEach(examenDb::removePregunta);
+                .collect(Collectors.toList());
+
+                eliminadas.forEach(examenDb::removePregunta);
 
         examenDb.setPreguntas(examen.getPreguntas());
+        examenDb.setAsignaturaHija(examen.getAsignaturaHija());
+        examenDb.setAsignaturaPadre(examen.getAsignaturaPadre());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(examenDb));
     }
 
