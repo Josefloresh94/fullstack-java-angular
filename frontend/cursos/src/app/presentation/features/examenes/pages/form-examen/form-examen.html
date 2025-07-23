@@ -1,0 +1,102 @@
+<section
+  class="relative overflow-x-auto sm:rounded-lg max-w-5xl mx-auto max-h-screen p-4 bg-white border border-gray-200 rounded-lg shadow"
+>
+  <div class="flex justify-between align-middle">
+    <h1 class="text-2xl font-bold">{{titulo()}}</h1>
+    <button class="cursor-pointer" routerLink="/examenes">
+      <mat-icon fontIcon="home"></mat-icon>
+    </button>
+  </div>
+  <hr class="my-6"/>
+  <form class="max-w-5xl mx-auto">
+    <!-- Input field for 'Name' -->
+    <div class="relative z-0 w-full mb-5 group">
+      <input
+        type="text"
+        name="floating_first_name"
+        id="floating_first_name"
+        [(ngModel)]="model()!.nombre"
+        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 peer"
+        placeholder=" "
+        required
+      />
+      <label
+        for="floating_first_name"
+        class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+        >First name</label
+      >
+    </div>
+    <!-- Input field for 'Asignatura Padre' -->
+    <div class="relative z-0 w-full mb-5 group">
+      <label for="asignatura-padre" class="block mb-2 text-sm font-medium text-gray-900">Asignatura</label>
+      <select
+        name="asignatura-padre"
+        id="asignatura-padre"
+        (change)="cargarHijos()"
+        [compareWith]="compararAsignatura"
+        [(ngModel)]="model()!.asignaturaPadre"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        <option [ngValue]="undefined">Elige una asignatura</option>
+        @for (asignatura of asignaturasPadre; track $index) {
+          <option [ngValue]="asignatura">{{asignatura.nombre}}</option>
+        }
+      </select>
+    </div>
+    <!-- Input field for 'Asignatura Hija' -->
+    <div class="relative z-0 w-full mb-5 group">
+      <label for="asignatura-hija" class="block mb-2 text-sm font-medium text-gray-900">Asignatura hija</label>
+      <select
+        name="asignatura-hija"
+        id="asignatura-hija"
+        [(ngModel)]="model()!.asignaturaHija"
+        [compareWith]="compararAsignatura"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        <option [ngValue]="undefined">Elige una asignatura</option>
+        @for (asignatura of asignaturasHija; track $index) {
+          <option [ngValue]="asignatura">{{asignatura.nombre}}</option>
+        }
+      </select>
+    </div>
+    <div class="my-2">
+      <button type="button" (click)="agregarPregunta()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none">
+        Agregar Pregunta
+      </button>
+
+      @for (pregunta of model()!.preguntas; track $index) {
+          <div class="my-2 flex items-end space-x-4">
+            <div class="relative z-0 w-full mb-5 group">
+              <input
+                type="text"
+                name="pregunta"
+                id="pregunta"
+                (change)="asignarTexto(pregunta, $event)"
+                value="{{pregunta.texto}}"
+                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 peer"
+                placeholder=" "
+                required
+              />
+              <label
+                for="pregunta"
+                class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                >Pregunta {{$index + 1}}</label
+              >
+              <!-- @if (errorPreguntas) {
+                <div class="alert alert-danger">
+                  {{ errorPreguntas }}
+                </div>
+              } -->
+            </div>
+            <div>
+              <button (click)="eliminarPregunta(pregunta)" class="btn btn-danger btn-s rounded mb-2 p-1">
+                <mat-icon fontIcon="close"></mat-icon>
+              </button>
+            </div>
+          </div>
+        }
+    </div>
+    <!-- Save button -->
+    <button type="button" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 w-full" (click)="model()!.id ? editar() : crear()">
+      {{ model()!.id ? 'Actualizar': 'Crear' }}
+    </button>
+  </form>
+</section>

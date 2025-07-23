@@ -1,0 +1,37 @@
+<section
+  class="relative overflow-x-auto sm:rounded-lg max-w-5xl mx-auto max-h-screen p-4 bg-white border border-gray-200 rounded-lg shadow"
+>
+  <div class="flex justify-between align-middle">
+    <h1 class="text-2xl font-bold">{{ titulo() }}</h1>
+    <button class="cursor-pointer" routerLink="/cursos">
+      <mat-icon fontIcon="home"></mat-icon>
+    </button>
+  </div>
+  <hr class="my-6" />
+  <form class="max-w-5xl mx-auto">
+    <!-- Input field for 'Name' -->
+    <div class="relative z-0 w-full mb-5 group">
+      <input
+        type="text"
+        name="floating_course_name"
+        id="floating_course_name"
+        [(ngModel)]="model()!.nombre"
+        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 peer"
+        placeholder=" "
+        required
+      />
+      <label
+        for="floating_course_name"
+        class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+        >Nombre de Curso</label
+      >
+    </div>
+    <button
+      type="submit"
+      class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center"
+      (click)="model()!.id ? editar() : crear()"
+    >
+      {{ model()!.id ? "Actualizar" : "Crear" }}
+    </button>
+  </form>
+</section>

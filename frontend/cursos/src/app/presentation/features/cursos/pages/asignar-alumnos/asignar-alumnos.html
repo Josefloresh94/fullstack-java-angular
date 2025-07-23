@@ -1,0 +1,111 @@
+<mat-card
+  class="relative overflow-x-auto sm:rounded-lg max-w max-h-screen m-2 p-4 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+>
+  <div class="flex justify-between align-middle">
+    <h1>Asignar Alumnos</h1>
+    <button class="btn btn-danger btn-sm rounded" routerLink="/cursos">
+      <mat-icon
+        aria-hidden="false"
+        aria-label="Example home icon"
+        fontIcon="home"
+      ></mat-icon>
+    </button>
+  </div>
+  <hr />
+  <!-- @if(curso){ -->
+  <mat-card-header>
+    Alumnos del curso
+    <!-- {{ curso.nombre }} -->
+  </mat-card-header>
+  <!-- } -->
+  <mat-card-content>
+    <mat-tab-group dynamicHeight>
+      <!-- [(selectedIndex)]="tabIndex" -->
+      <mat-tab label="Asignar Alumnos">
+        <div class="row">
+          <mat-form-field class="my-2">
+            <mat-label>Buscar alumno</mat-label>
+            <!-- <input type="text" matInput formControlName="buscarAlumno" (keyup)="filtrar($event)" > -->
+          </mat-form-field>
+        </div>
+
+        <table mat-table class="mat-elevation-z8">
+          <!-- [dataSource]="alumnosAsignar" -->
+          <ng-container matColumnDef="seleccion">
+            <th mat-header-cell *matHeaderCellDef>
+              <!-- <mat-checkbox
+                (change)="seleccionarDesSeleccionarTodos()"
+                [checked]="seleccion.hasValue() && estanTodosSeleccionados()"
+                [indeterminate]="seleccion.hasValue() && !estanTodosSeleccionados()"
+                aria-label="Seleccionar todos los alumnos"
+                class="cursor-pointer"
+              >
+              </mat-checkbox> -->
+            </th>
+            <td mat-cell *matCellDef="let alumno">
+              <!-- <mat-checkbox
+                (click)="$event.stopPropagation()"
+                (change)="seleccion.toggle(alumno)"
+                [checked]="seleccion.isSelected(alumno)"
+                aria-label="Seleccionar alumno {{ alumno.nombre }} {{ alumno.apellido }}"
+                [disabled]="alumno.asignado"
+                class="cursor-pointer"
+                matTooltip="{{ alumno.asignado ? 'Ya asignado a otro curso' : 'Seleccionar alumno' }}"
+                >
+
+              </mat-checkbox> -->
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="nombre">
+            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+            <td mat-cell *matCellDef="let alumno">{{ alumno.nombre }}</td>
+          </ng-container>
+          <ng-container matColumnDef="apellido">
+            <th mat-header-cell *matHeaderCellDef>Apellido</th>
+            <td mat-cell *matCellDef="let alumno">{{ alumno.apellido }}</td>
+          </ng-container>
+          <!-- <tr mat-header-row *matHeaderRowDef="mostrarColumnas"></tr>
+          <tr mat-row *matRowDef="let alumno; columns: mostrarColumnas;" (click)="seleccion.toggle(alumno)"></tr> -->
+        </table>
+
+        <!-- <button mat-raised-button color="primary" class="m-4" (click)="asignar()" [disabled]="!seleccion.hasValue()">Asignar</button> -->
+      </mat-tab>
+
+      <mat-tab label="Alumnos">
+        <table mat-table class="mat-elevation-z8">
+          <!-- [dataSource]="dataSource" -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let alumno">{{ alumno.id }}</td>
+          </ng-container>
+          <ng-container matColumnDef="nombre">
+            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+            <td mat-cell *matCellDef="let alumno">{{ alumno.nombre }}</td>
+          </ng-container>
+          <ng-container matColumnDef="apellido">
+            <th mat-header-cell *matHeaderCellDef>Apellido</th>
+            <td mat-cell *matCellDef="let alumno">{{ alumno.apellido }}</td>
+          </ng-container>
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>email</th>
+            <td mat-cell *matCellDef="let alumno">{{ alumno.email }}</td>
+          </ng-container>
+          <ng-container matColumnDef="eliminar">
+            <th mat-header-cell *matHeaderCellDef>Eliminar</th>
+            <td mat-cell *matCellDef="let alumno">
+              <!-- <button mat-mini-fab class="btn btn-warn" (click)="eliminarAlumno(alumno)">
+                <mat-icon>close</mat-icon>
+              </button> -->
+            </td>
+          </ng-container>
+          <!-- <tr mat-header-row *matHeaderRowDef="mostrarColumnasAlumnos"></tr>
+          <tr mat-row *matRowDef="let alumno; columns: mostrarColumnasAlumnos;" (click)="seleccion.toggle(alumno)"></tr> -->
+        </table>
+
+        <mat-paginator showFirstLastButtons class="float-left mx-2">
+          <!-- [pageSizeOptions]="pageSizeOptions" -->
+        </mat-paginator>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>

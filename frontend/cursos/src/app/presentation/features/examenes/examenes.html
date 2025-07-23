@@ -1,0 +1,65 @@
+<div
+  class="relative overflow-x-auto sm:rounded-lg max-w-5xl mx-auto max-h-screen p-4 bg-white border border-gray-200 rounded-lg shadow mt-20"
+>
+  <div class="flex justify-between align-middle">
+    <h1>{{ titulo }}</h1>
+    <button class="cursor-pointer" routerLink="/examenes/form">
+      Crear Examen
+    </button>
+  </div>
+  <hr class="my-4" />
+  @if (lista()) {
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 mb-4">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <tr>
+          <th scope="col" class="px-6 py-3">ID</th>
+          <th scope="col" class="px-6 py-3">Nombre</th>
+          <th scope="col" class="px-6 py-3">Asignaturas</th>
+          <th scope="col" class="px-6 py-3">Preguntas</th>
+          <th scope="col" class="px-6 py-3">Creado en</th>
+          <th scope="col" class="px-6 py-3">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (examen of lista(); track $index) {
+          <tr class="odd:bg-white even:bg-gray-50 text-center border-b">
+            <td class="px-6 py-4">{{ examen.id }}</td>
+            <td class="px-6 py-4">{{ examen.nombre }}</td>
+            <td class="px-6 py-4">
+              {{ examen.asignaturaPadre.nombre }} /
+              {{ examen.asignaturaHija.nombre }}
+            </td>
+            <td class="px-6 py-4">{{ examen.preguntas.length }}</td>
+            <td>{{ examen.createAt | date: "yyyy/MM/dd" }}</td>
+            <td class="px-6 py-4 w-fit">
+              <button
+                class="text-green-700 hover:cursor-pointer"
+                [routerLink]="['/examenes/form', examen.id]"
+              >
+                <mat-icon fontIcon="edit"></mat-icon>
+              </button>
+              <button
+                class="text-red-700 hover:cursor-pointer ml-3"
+                (click)="eliminar(examen)"
+              >
+                <mat-icon fontIcon="delete"></mat-icon>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <mat-paginator
+      [length]="totalRegistros()"
+      [pageSize]="totalPorPagina()"
+      [pageIndex]="paginaActual()"
+      [pageSizeOptions]="pageSizeOptions()"
+      (page)="paginar($event)"
+      showFirstLastButtons
+      class="float-right"
+    >
+    </mat-paginator>
+  } @else {
+    <div class="alert alert-info">No hay examenes en el sistema.</div>
+  }
+</div>

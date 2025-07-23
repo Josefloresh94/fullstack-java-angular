@@ -1,21 +1,75 @@
 import { Routes } from '@angular/router';
-import { AlumnosComponent } from './components/alumnos/alumnos.component';
-import { CursosComponent } from './components/cursos/cursos.component';
-import { ExamenesComponent } from './components/examenes/examenes.component';
-import { AlumnosFormComponent } from './components/alumnos/alumnos-form/alumnos-form.component';
-import { CursoFormComponent } from './components/cursos/curso-form/curso-form.component';
-import { ExamenesFormComponent } from './components/examenes/examenes-form/examenes-form.component';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: '/alumnos'},
-  { path: 'alumnos', component: AlumnosComponent },
-  { path: 'alumnos/form', component: AlumnosFormComponent },
-  { path: 'alumnos/form/:id', component: AlumnosFormComponent },
-  { path: 'cursos', component: CursosComponent },
-  { path: 'cursos/form', component: CursoFormComponent},
-  { path: 'cursos/form/:id', component: CursoFormComponent},
-  { path: 'examenes', component: ExamenesComponent},
-  { path: 'examenes/form', component: ExamenesFormComponent},
-  { path: 'examenes/form/:id', component: ExamenesFormComponent},
-  // { path: 'cursos/asignar-alumnos/:id', component: AsignarAlumnosComponent},
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: '/alumnos',
+  },
+  {
+    path: 'alumnos',
+    loadComponent: () =>
+      import('./presentation/features/alumnos/alumnos').then((m) => m.Alumnos),
+  },
+  {
+    path: 'alumnos/form',
+    loadComponent: () =>
+      import(
+        './presentation/features/alumnos/pages/form-alumno/form-alumno'
+      ).then((m) => m.FormAlumno),
+  },
+  {
+    path: 'alumnos/form/:id',
+    loadComponent: () =>
+      import(
+        './presentation/features/alumnos/pages/form-alumno/form-alumno'
+      ).then((m) => m.FormAlumno),
+  },
+  {
+    path: 'cursos',
+    loadComponent: () =>
+      import('./presentation/features/cursos/cursos').then((m) => m.Cursos),
+  },
+  {
+    path: 'cursos/form',
+    loadComponent: () =>
+      import('./presentation/features/cursos/pages/form-curso/form-curso').then(
+        (m) => m.FormCurso,
+      ),
+  },
+  {
+    path: 'cursos/form/:id',
+    loadComponent: () =>
+      import('./presentation/features/cursos/pages/form-curso/form-curso').then(
+        (m) => m.FormCurso,
+      ),
+  },
+  {
+    path: 'cursos/asignar-alumnos/:id',
+    loadComponent: () =>
+      import(
+        './presentation/features/cursos/pages/asignar-alumnos/asignar-alumnos'
+      ).then((m) => m.AsignarAlumnos),
+  },
+  {
+    path: 'examenes',
+    loadComponent: () =>
+      import('./presentation/features/examenes/examenes').then(
+        (m) => m.Examenes,
+      ),
+  },
+  {
+    path: 'examenes/form',
+    loadComponent: () =>
+      import(
+        './presentation/features/examenes/pages/form-examen/form-examen'
+      ).then((m) => m.FormExamen),
+  },
+  {
+    path: 'examenes/form/:id',
+    loadComponent: () =>
+      import(
+        './presentation/features/examenes/pages/form-examen/form-examen'
+      ).then((m) => m.FormExamen),
+  },
 ];

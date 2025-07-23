@@ -1,0 +1,95 @@
+<section
+  class="relative overflow-x-auto sm:rounded-lg max-w-5xl mx-auto max-h-screen p-4 bg-white border border-gray-200 rounded-lg shadow mt-20"
+>
+  <div class="flex justify-between align-middle">
+    <h1>{{ titulo }}</h1>
+    <button class="cursor-pointer" routerLink="/alumnos/form">
+      Crear Alumno
+    </button>
+  </div>
+  <hr class="my-4" />
+  @if (lista()) {
+    <table class="w-full text-sm max-w-5xl rtl:text-right text-gray-500 mb-4">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <tr>
+          <th scope="col" class="px-6 py-3">ID</th>
+          <th scope="col" class="px-6 py-3">Foto</th>
+          <th scope="col" class="px-6 py-3">Nombre</th>
+          <th scope="col" class="px-6 py-3">Apellido</th>
+          <th scope="col" class="px-6 py-3">Email</th>
+          <th scope="col" class="px-6 py-3">Creado en</th>
+          <th scope="col" class="px-6 py-3">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (alumno of lista(); track $index) {
+          <tr class="odd:bg-white text-center even:bg-gray-50 border-b">
+            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+              {{ alumno.id }}
+            </td>
+            <td class="px-6 py-4">
+              @if (alumno.fotoHashCode) {
+                <!-- <img
+                  [src]="
+                    baseEndpoint +
+                    '/uploads/img/' +
+                    alumno.id +
+                    '?fotoHashCode=' +
+                    alumno.fotoHashCode
+                  "
+                  class="img-thumbnail rounded"
+                  style="width: 64px; cursor: pointer"
+                /> -->
+              } @else {
+                <button
+                  class="hover:cursor-pointer"
+                  [routerLink]="['/alumnos/form', alumno.id]"
+                >
+                  <mat-icon fontIcon="person_add"></mat-icon>
+                </button>
+              }
+            </td>
+            <td class="px-6 py-4">
+              {{ alumno.nombre }}
+            </td>
+            <td class="px-6 py-4">
+              {{ alumno.apellido }}
+            </td>
+            <td class="px-6 py-4">
+              {{ alumno.email }}
+            </td>
+            <td class="px-6 py-4">
+              {{ alumno.createAt | date: "yyyy/MM/dd" }}
+            </td>
+            <td class="px-6 py-4 w-fit">
+              <button
+                class="text-green-700 hover:cursor-pointer"
+                [routerLink]="['/alumnos/form', alumno.id]"
+              >
+                <mat-icon fontIcon="edit"></mat-icon>
+              </button>
+              <button
+                class="text-red-700 hover:cursor-pointer ml-3"
+                (click)="eliminar(alumno)"
+              >
+                <mat-icon fontIcon="delete"></mat-icon>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <mat-paginator
+      [length]="totalRegistros()"
+      [pageSize]="totalPorPagina()"
+      [pageIndex]="paginaActual()"
+      [pageSizeOptions]="pageSizeOptions()"
+      (page)="paginar($event)"
+      showFirstLastButtons
+      class="float-right"
+    >
+    </mat-paginator>
+  } @else {
+    <div class="alert alert-info">No hay alumnos en el sistema.</div>
+  }
+</section>

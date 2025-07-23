@@ -1,0 +1,66 @@
+<div
+  class="relative overflow-x-auto sm:rounded-lg max-w-5xl mx-auto max-h-screen p-4 bg-white border border-gray-200 rounded-lg shadow mt-20"
+>
+  <div class="flex justify-between align-middle">
+    <h1>{{ titulo }}</h1>
+    <button class="cursor-pointer" routerLink="/cursos/form">
+      Crear Curso
+    </button>
+  </div>
+  <hr class="my-4" />
+  @if (lista()) {
+    <table class="w-full text-sm max-w-5xl rtl:text-right text-gray-500 mb-4">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <tr>
+          <th scope="col" class="px-6 py-3">id</th>
+          <th scope="col" class="px-6 py-3">nombre</th>
+          <th scope="col" class="px-6 py-3">cantidad de alumnos</th>
+          <th scope="col" class="px-6 py-3">creado en</th>
+          <th scope="col" class="px-6 py-3">acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (curso of lista(); track $index) {
+          <tr class="odd:bg-white text-center even:bg-gray-50 border-b">
+            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+              {{ curso.id }}
+            </td>
+            <td class="px-6 py-4">{{ curso.nombre }}</td>
+            <td class="px-6 py-4">
+              <button class="cursor-pointer">
+                {{ curso.alumnos.length }}
+              </button>
+            </td>
+            <td class="px-6 py-4">{{ curso.createAt | date: "yyyy/MM/dd" }}</td>
+            <td class="px-6 py-4 w-fit">
+              <button
+                class="text-green-700 hover:cursor-pointer"
+                [routerLink]="['/cursos/form', curso.id]"
+              >
+                <mat-icon fontIcon="edit"></mat-icon>
+              </button>
+              <button
+                class="text-red-700 hover:cursor-pointer ml-3"
+                (click)="eliminar(curso)"
+              >
+                <mat-icon fontIcon="delete"></mat-icon>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <mat-paginator
+      [length]="totalRegistros()"
+      [pageSize]="totalPorPagina()"
+      [pageIndex]="paginaActual()"
+      [pageSizeOptions]="pageSizeOptions()"
+      (page)="paginar($event)"
+      showFirstLastButtons
+      class="float-right"
+    >
+    </mat-paginator>
+  } @else {
+    <div class="alert alert-info">No hay cursos en el sistema.</div>
+  }
+</div>
